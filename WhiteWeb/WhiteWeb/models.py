@@ -1,8 +1,9 @@
 from WhiteWeb import db,app ,login_manager
 from flask_login import UserMixin
-#from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 
-#hash=Bcrypt(app)
+hash=Bcrypt(app)
+
 @login_manager.user_loader
 def load_user(userid):
     print(User.query.get(userid))
@@ -20,3 +21,6 @@ class User(db.Model,UserMixin):
     def __init__(self, name=None, password=None, email=None):
         self.name = name
         self.password = password
+
+    def check_password(self, password):
+        return hash.check_password_hash(self.password,password)

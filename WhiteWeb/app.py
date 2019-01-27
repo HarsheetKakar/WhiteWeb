@@ -9,12 +9,14 @@ from WhiteWeb.models import User, load_user
 import os
 from WhiteWeb import app, db
 from flask_login import login_user,login_required,logout_user, current_user
+from flask_bcrypt import Bcrypt
 
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
 
 db.create_all()
+hash= Bcrypt(app)
 
 # Automatically tear down SQLAlchemy.
 '''
@@ -42,7 +44,6 @@ def login_required(test):
 
 
 @app.route('/')
-@login_required
 def home():
     user= current_user
     return render_template('pages/placeholder.home.html',user=user)
@@ -59,7 +60,7 @@ def login():
     form = LoginForm(request.form)
     if(form.is_submitted()):
         user = User.query.filter_by(name= form.name.data).first()
-        if(user.password == form.password.data):
+        if(user.check_password(form.password.data)):
             login_user(user)
             next= request.args.get('next')
             print(next)
@@ -76,7 +77,7 @@ def register():
     print(form.email.data)
     if(form.is_submitted()): #form.validate_on_submit() always returning false, even without any FlaskForm validators
         print(form.validate_on_submit())
-        user= User(name = form.name.data, password = form.password.data, email = form.email.data)
+        user= User(name = form.name.data, password = hash.generate_password_hash(form.password.data), email = form.email.data)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))

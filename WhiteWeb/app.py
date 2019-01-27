@@ -61,7 +61,11 @@ def login():
         user = User.query.filter_by(name= form.name.data).first()
         if(user.password == form.password.data):
             login_user(user)
-            return "you are logged in"
+            next= request.args.get('next')
+            print(next)
+            if next == None or not next[0]=='/':
+                next = url_for('home')
+            return redirect(next)
 
     return render_template('forms/login.html', form=form)
 
@@ -107,7 +111,7 @@ def not_found_error(error):
 def logout():
     print("logged out")
     logout_user()
-    return "logged out"
+    return redirect(url_for('login'))
 
 # Default port:
 if __name__ == '__main__':

@@ -1,0 +1,13 @@
+{% extends 'layouts/main.html' %}
+{% block title %} Reports {% endblock %}
+
+{% block content %}
+  {% for driver in drivers %}
+    <p>
+    Driver Id = {{driver}} <br>
+    Driver Name = {{ drivers[driver]['name'] }} <br>
+    Driver Phone Number = {{ drivers[driver]['phone'] }} <br>
+    Driver Assigned to -- #not yet implemented <br>
+    </p>
+  {% endfor %}
+{% endblock %}

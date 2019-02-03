@@ -10,6 +10,7 @@ import os
 from WhiteWeb import app, db
 from flask_login import login_user,login_required,logout_user, current_user
 from flask_bcrypt import Bcrypt
+import pyrebase #library to access firebase
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -18,40 +19,35 @@ from flask_bcrypt import Bcrypt
 db.create_all()
 hash= Bcrypt(app)
 
-# Automatically tear down SQLAlchemy.
-'''
-@app.teardown_request
-def shutdown_session(exception=None):
-    db_session.remove()
-'''
+firebase_config = {#api configurations
+    'apiKey': "AIzaSyDGwptgJRet0hxRzER2J_ws9gqAXOQZ3f4",
+    'authDomain': "whiteweb-2ca0e.firebaseapp.com",
+    'databaseURL': "https://whiteweb-2ca0e.firebaseio.com",
+    'projectId': "whiteweb-2ca0e",
+    'storageBucket': "whiteweb-2ca0e.appspot.com",
+    'messagingSenderId': "98773813262"
+}
 
-# Login required decorator.
-'''
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
-    #use flask login manager instead of this
-'''
-#----------------------------------------------------------------------------#
-# Controllers.
-#----------------------------------------------------------------------------#
+firebase = pyrebase.initialize_app(firebase_config) #firebase handler
+
+firebase_db = firebase.database() #firebase database handler
 
 
 @app.route('/')
 def home():
-    user= current_user
-    return render_template('pages/placeholder.home.html',user=user)
+    user = current_user
+    return render_template('pages/placeholder.home.html',user = user)
 
+@app.route('/reports')
+@login_required
+def reports():
+    user = current_user
+    drivers = firebase_db.child("DriversInformation").get().val()
+    return render_template('pages/reports.html',drivers = drivers, user = user)
 
 @app.route('/about')
 def about():
-    user=current_user
+    user = current_user
     return render_template('pages/placeholder.about.html', user=user)
 
 

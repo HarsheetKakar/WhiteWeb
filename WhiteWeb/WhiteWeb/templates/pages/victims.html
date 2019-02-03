@@ -1,0 +1,15 @@
+{% extends 'layouts/main.html' %}
+{% block title %} Reports {% endblock %}
+
+{% block content %}
+  {% for victim in victims %}
+    <p>
+    Victim Id = {{victim}} <br>
+    Victim Name = {{ victims[victim]['name'] }} <br>
+    Victim Phone Number = {{ victims[victim]['phone'] }} <br>
+    Victim Assigned to -- #not yet implemented <br>
+    Report Description = #not yet implemented <br>
+    Location = #not yet implemented  <br>
+    </p>
+  {% endfor %}
+{% endblock %}

@@ -19,7 +19,7 @@ import pyrebase #library to access firebase
 db.create_all()
 hash= Bcrypt(app)
 
-firebase_config = {#api configurations
+firebase_config = {                                      #api configurations
     'apiKey': "AIzaSyDGwptgJRet0hxRzER2J_ws9gqAXOQZ3f4",
     'authDomain': "whiteweb-2ca0e.firebaseapp.com",
     'databaseURL': "https://whiteweb-2ca0e.firebaseio.com",
@@ -50,6 +50,12 @@ def about():
     user = current_user
     return render_template('pages/placeholder.about.html', user=user)
 
+@app.route('/victims')
+@login_required
+def victims():
+    user = current_user
+    victims = firebase_db.child("RidersInformation").get().val() #will change RidersInformation to VictimsInformation
+    return render_template('pages/victims.html', user = user, victims = victims)
 
 @app.route('/login', methods=['GET','POST'])
 def login():

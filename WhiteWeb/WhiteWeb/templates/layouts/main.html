@@ -17,6 +17,7 @@
 <link type="text/css" rel="stylesheet" href="/static/css/main.css" />
 <link type="text/css" rel="stylesheet" href="/static/css/main.responsive.css" />
 <link type="text/css" rel="stylesheet" href="/static/css/main.quickfix.css" />
+{% block style %}{% endblock %}
 <!-- /styles -->
 
 <!-- favicons -->
@@ -58,6 +59,7 @@
             <li><a href="{{url_for('logout')}}"> Logout </a></li>
             <li><a href="{{url_for('reports')}}"> Reports </a></li>
             <li><a href="{{url_for('victims')}}"> Victims </a></li>
+            <li><a href="{{url_for('map')}}"> Map </a></li>
             {% endif %}
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>

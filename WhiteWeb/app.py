@@ -72,6 +72,11 @@ def login():
 
     return render_template('forms/login.html', form=form)
 
+@app.route('/map')
+@login_required
+def map():
+    user = current_user
+    return render_template('pages/map.html',user = user)
 
 @app.route('/register', methods=['GET','POST'])
 def register():

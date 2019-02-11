@@ -76,7 +76,18 @@ def login():
 @login_required
 def map():
     user = current_user
-    return render_template('pages/map.html',user = user)
+    drivers = firebase_db.child('Drivers').get().val()
+    driver_locations_lat = []
+    driver_locations_lng = []
+    for i in drivers:
+        driver_locations_lat.append(drivers[i]['l'][0])
+        driver_locations_lng.append(drivers[i]['l'][1])
+    print(driver_locations_lat,driver_locations_lng)
+    return render_template('pages/map.html',
+                           user = user,
+                            driver_locations_lat=driver_locations_lat,
+                            driver_locations_lng=driver_locations_lng,
+                            length = len(drivers))
 
 @app.route('/register', methods=['GET','POST'])
 def register():
